@@ -1,6 +1,24 @@
 // import Todo model
 const Todo = require('../models/Todo')
 
+exports.getTodo = async (req, res) => {
+    try {
+        const todos = await Todo.find({})
+        return res.status(200).json({
+            sucess: true,
+            message: 'Todo fetched successfully',
+            data: todos,
+        })
+    } catch (error) {
+        console.log('Error in fetching Todos.....')
+        console.log(error.message)
+        res.status(500).json({
+            sucess: false,
+            message: 'Internal Server Error',
+        })
+    }
+}
+
 exports.createTodo = async (req, res) => {
     try {
         const { title, description } = req.body
@@ -26,6 +44,39 @@ exports.createTodo = async (req, res) => {
         })
     } catch (error) {
         console.log('Error in creating todo.....'), console.error(error.message)
+        res.status(500).json({
+            sucess: false,
+            message: 'Internal Server Error',
+        })
+    }
+}
+
+exports.updateTodo = async (req, res) => {
+    try {
+        const { id } = req.params
+        console.log(id)
+
+        const { title, description } = req.body
+
+        const updateTodo = await Todo.findByIdAndUpdate(
+            { _id: id },
+            {
+                title,
+                description,
+                updated_at: Date.now(),
+            },
+            { new: true }
+        )
+
+        console.log('updateTodo......', updateTodo)
+        res.status(200).json({
+            sucess: true,
+            message: 'Todo updated successfully',
+            data: updateTodo,
+        })
+    } catch (error) {
+        console.log('Error in updating todo.....')
+        console.error(error.message)
         res.status(500).json({
             sucess: false,
             message: 'Internal Server Error',
