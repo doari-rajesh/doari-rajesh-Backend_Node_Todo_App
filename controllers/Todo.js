@@ -92,7 +92,9 @@ exports.updateTodo = async (req, res) => {
             { new: true }
         )
 
-        // console.log('updateTodo......', updateTodo)
+        console.log('updateTodo......', updateTodo)
+
+        // TODO TASK 1: Check if the todo is not found in the database and return a 404 status code
 
         res.status(200).json({
             sucess: true,
